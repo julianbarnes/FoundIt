@@ -1,0 +1,28 @@
+{
+  "name": "foundit-backend",
+  "version": "1.0.0",
+  "description": "This backend will handle authentication as well as lost item reports and claims. It connects to a Microsoft SQL Server that holds item information.",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julianbarnes/FoundIt.git"
+  },
+  "keywords": [
+    "lost",
+    "found",
+    "app"
+  ],
+  "author": "Julian Barnes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/julianbarnes/FoundIt/issues"
+  },
+  "homepage": "https://github.com/julianbarnes/FoundIt#readme"
+}

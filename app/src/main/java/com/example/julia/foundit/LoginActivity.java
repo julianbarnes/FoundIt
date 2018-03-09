@@ -3,6 +3,7 @@ package com.example.julia.foundit;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+//import com.amazonaws.mobile.client.AWSMobileClient;
+
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password;
@@ -31,7 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     private StringRequest request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        //May have to move this after we change the order of Activities
+        //AWSMobileClient.getInstance().initialize(this).execute();
+
         setContentView(R.layout.activity_login);
 
         email = findViewById(R.id.email);
@@ -42,8 +50,15 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         sign_in.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                Log.d("Buttons","This button was clicked");
+                Intent intent = new Intent(LoginActivity.this, LostItemBrowseActivity.class);
+                startActivity(intent);
+            }
+            /*public void onClick(View v) {
+
                 request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
@@ -76,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 };
                 requestQueue.add(request);
-            }
+            }*/
         });
 
     }

@@ -20,4 +20,7 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="button">Button</string>
+    <string name="title_activity_lost_item_browse">LostItemBrowseActivity</string>
+    <string name="tvw1">TextView</string>
+    <string name="tvw2">TextView</string>
 </resources>
