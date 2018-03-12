@@ -1,7 +1,6 @@
 package com.example.julia.foundit;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -16,17 +15,17 @@ import android.widget.TextView;
  */
 
 public class CustomListView extends ArrayAdapter<String> {
-    private String[] fruitname;
+    private String[] item_names;
     private String[] desc;
     private Integer[] imgid;
     private Activity context;
 
-    public CustomListView(Activity context, String[] fruitname, String[] desc, Integer[] imgid) {
+    public CustomListView(Activity context, String[] item_names, String[] desc, Integer[] imgid) {
 
-        super(context, R.layout.listviewlayout, fruitname);
+        super(context, R.layout.listviewlayout, item_names);
 
         this.context = context;
-        this.fruitname = fruitname;
+        this.item_names = item_names;
         this.desc=desc;
         this.imgid=imgid;
     }
@@ -48,7 +47,7 @@ public class CustomListView extends ArrayAdapter<String> {
         }
 
         viewHolder.ivw.setImageResource(imgid[position]);
-        viewHolder.tvw1.setText(fruitname[position]);
+        viewHolder.tvw1.setText(item_names[position]);
         viewHolder.tvw2.setText(desc[position]);
         return r;
 
@@ -61,8 +60,8 @@ class ViewHolder
     ImageView ivw;
     ViewHolder(View v)
     {
-        tvw1=v.findViewById(R.id.fruit_title);
-        tvw2= v.findViewById(R.id.fruit_desc);
-        ivw= v.findViewById(R.id.fruit_pic);
+        tvw1=v.findViewById(R.id.item_title);
+        tvw2= v.findViewById(R.id.item_desc);
+        ivw= v.findViewById(R.id.item_pic);
     }
 }

@@ -11,15 +11,15 @@ import android.widget.ListView;
 public class LostItemBrowseActivity extends AppCompatActivity {
 
     ListView LostItems;
-    String[] fruitname={"Mango", "Banana", "Watermelon","Grapes", "Kiwi", "Apple"};
-    String[] desc = {"This is mango","This is banana","This is watermelon","This is grapes", "This is Kiwi", "This is Apple"};
+    String[] list_items={"Item1", "Item2", "Item3","Item4", "Item5", "Item6"};
+    String[] desc = {"This is Item1","This is Item2","This is Item3","This is Item4", "This is Item5", "This is Item6"};
     Integer[] imgid={R.drawable.fruit,R.drawable.fruit,R.drawable.fruit,R.drawable.fruit,R.drawable.fruit,R.drawable.fruit};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lost_item_browse);
         LostItems = findViewById(R.id.lostitemslist);
-        CustomListView customListView = new CustomListView(this, fruitname, desc, imgid);
+        CustomListView customListView = new CustomListView(this, list_items, desc, imgid);
         LostItems.setAdapter(customListView);
 
 
