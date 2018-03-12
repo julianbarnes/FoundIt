@@ -36,7 +36,8 @@
         <activity
             android:name=".LostItemBrowseActivity"
             android:label="@string/title_activity_lost_item_browse"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ViewLostItem"></activity>
     </application>
 
 </manifest>

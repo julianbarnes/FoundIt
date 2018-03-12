@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,9 @@ public class CustomListView extends ArrayAdapter<String> {
         return r;
 
     }
+
+    //Returns the item that the view represents
+
 }
 class ViewHolder
 {
@@ -64,4 +68,6 @@ class ViewHolder
         tvw2= v.findViewById(R.id.item_desc);
         ivw= v.findViewById(R.id.item_pic);
     }
+
+
 }
