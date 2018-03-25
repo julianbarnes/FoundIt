@@ -25,4 +25,21 @@
     <string name="tvw2">TextView</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+
+
+    <!--Lost Form Prompts-->
+    <string name="name_prompt">Name</string>
+    <string name="phone_prompt">Phone number</string>
+    <string name="email_prompt">Email</string>
+    <string name="type_prompt">Property Type</string>
+    <string name="make_prompt">Make</string>
+    <string name="model_prompt">Model</string>
+    <string name="color_prompt">Color</string>
+    <string name="id_prompt">Serial or ID Number</string>
+    <string name="device_number_prompt">Phone Number of Lost Device</string>
+    <string name="location_prompt">Location Property Was Lost</string>
+    <string name="date_prompt">Date Property Was Lost</string>
+    <string name="description_prompt">Further Description of Lost Property</string>
+
+
 </resources>

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class LostItemBrowseActivity extends AppCompatActivity {
@@ -20,11 +21,19 @@ public class LostItemBrowseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lost_item_browse);
         LostItems = findViewById(R.id.lostitemslist);
 
-        //Create an item array
-    //    final Item[] lost_items = new Item[item_titles.length];//maybe should change to array list
-//        for (int i = 0; i < item_titles.length; i++){
-//            lost_items[i] = new Item(item_titles[i],item_descriptions[i]);
-//        }
+
+        //Initialize Report Lost item button
+        Button ReportButton = findViewById(R.id.report_btn);
+        ReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ReportLostActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        //Load the items into the ListView
         CustomListView customListView = new CustomListView(this, item_titles, item_descriptions, item_pics);
         LostItems.setAdapter(customListView);
         LostItems.setOnItemClickListener(
