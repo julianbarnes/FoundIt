@@ -16,7 +16,7 @@ var dbConfig = {
 
 //Test route that pulls from the database
 
-app.get('/api/Users', function(req, res) {
+app.get('/', function(req, res) {
   var command = "SELECT * FROM admin";
   connect(command, res);//returns an array
 });

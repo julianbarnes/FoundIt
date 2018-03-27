@@ -1,189 +1,96 @@
-//package edu.gatech.t_squaremobile;
 package com.example.julia.foundit;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.provider.Browser;
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.webkit.CookieManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.julia.foundit.LostItemBrowseActivity;
-import com.example.julia.foundit.R;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-//import edu.gatech.t_squaremobile.R;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class LoginActivity extends Activity {
+import java.util.HashMap;
+import java.util.Map;
 
-    WebView webView;
+//import com.amazonaws.mobile.client.AWSMobileClient;
 
+
+public class LoginActivity extends AppCompatActivity {
+
+    private EditText email, password;
+    private Button sign_in, register;
+    private RequestQueue requestQueue;
+    private static final String URL = "string to backend";
+    private StringRequest request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        //May have to move this after we change the order of Activities
+        //AWSMobileClient.getInstance().initialize(this).execute();
+
         setContentView(R.layout.activity_login);
 
-        webView = (WebView)findViewById(R.id.webView);
-        webView.clearCache(true);
-        webView.clearHistory();
-        webView.loadUrl("google.com");
-        webView.setWebViewClient(new WebViewClient() {
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        sign_in = findViewById(R.id.login);
+        register = findViewById(R.id.register);
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        sign_in.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (!url.contains("dev.m") || url.contains("cas")) {
-                    view.loadUrl(url);
-                } else {
-                    // run "mockup"-specific code
-                    String cookies = CookieManager.getInstance().getCookie(url);
-//                    String[] splitParams = url.split("\\?")[1].split("&");
-                    String[] splitParams = cookies.split("=");
-//                    String sessionName = splitParams[0].split("=")[1];
-//                    String sessionId = splitParams[1].split("=")[1];
-                    String sessionName = splitParams[0];
-                    String sessionId = splitParams[1];
-                    //GlobalState.setSessionName(sessionName);
-                    //GlobalState.setSessionId(sessionId);
-                    Intent homeIntent = new Intent(getApplicationContext(), LostItemBrowseActivity.class);
-                    startActivity(homeIntent);
-
-                }
-                return true;
+            public void onClick(View v) {
+                Log.d("Buttons","This button was clicked");
+                Intent intent = new Intent(LoginActivity.this, LostItemBrowseActivity.class);
+                startActivity(intent);
             }
-
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        LoginActivity.this);
-
-                alertDialogBuilder.setTitle("Refresh page");
-                alertDialogBuilder
-                        .setMessage("Login page has failed to load. Would you like to try again?")
-                        .setCancelable(false)
-                        .setPositiveButton("Refresh", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                                // if this button is clicked, just close
-                                // the dialog box and do nothing
-                                webView.reload();
+            /*public void onClick(View v) {
+                request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>(){
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject.names().get(0).equals("success")) {
+                                Toast.makeText(getApplicationContext(), "SUCCESS"
+                                        + jsonObject.getString("success"),
+                                        Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error" + jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
                             }
-                        })
-
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
-                                        dialog.cancel();
-                                    }
-                                });
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
-            }
-        });
-
-
-        webView.getSettings().setJavaScriptEnabled(true);
-
-        setProgressBarIndeterminateVisibility(true);
-        setProgressBarVisibility(true);
-
-
-        final Activity activity = this;
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                // Activities and WebViews measure progress with different scales.
-                // The progress meter will automatically disappear when we reach 100%
-                activity.setProgress(progress * 100);
-            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> hashmap = new HashMap<String, String>();
+                        hashmap.put("email", email.getText().toString());
+                        hashmap.put("password", password.getText().toString());
+                        return hashmap;
+                    }
+                };
+                requestQueue.add(request);
+            }*/
         });
 
     }
-
-    @Override
-    public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Uri data = intent.getData();
-        if(data != null) {
-            if(data.getQueryParameter("sessionName") != null && data.getQueryParameter("sessionId") != null) {
-                //GlobalState.setSessionName(data.getQueryParameter("sessionName"));
-                //GlobalState.setSessionId(data.getQueryParameter("sessionId"));
-            }
-        }
-        Intent homeIntent = new Intent(this, LostItemBrowseActivity.class);
-        startActivity(homeIntent);
-    }
-
-    //@Override
-    //public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    //	getMenuInflater().inflate(R.menu.login, menu);
-    //	return true;
-    //}
-
-//	public void onPress(View view) {
-//
-////		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(APIEndpoints.LOGINURL));
-////        intent.putExtra(Browser.EXTRA_APPLICATION_ID, "com.android.chrome");
-//////		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-////		startActivity(intent);
-//
-//        WebView webview = new WebView(this);
-//        setContentView(webview);
-//        webview.getSettings().setJavaScriptEnabled(true);
-//        webview.loadUrl(APIEndpoints.LOGINURL);
-//
-//    }
-//
-//	public void onPress2(View view) {
-//		final Intent intent = new Intent(this, HomeScreenActivity.class);
-//		final View addView = getLayoutInflater().inflate(
-//				R.layout.set_debug_credentials, null);
-//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//		builder.setTitle("Set debug mode credentials");
-//		builder.setView(addView);
-//		// Set up the buttons
-//		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//			@SuppressWarnings("unchecked")
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				EditText edittextUserId = (EditText) addView.findViewById(R.id.EditTextEnterUserId);
-//				EditText edittextSessionName = (EditText) addView.findViewById(R.id.EditTextEnterSessionName);
-//				EditText edittextSessionId = (EditText) addView.findViewById(R.id.EditTextEnterSessionId);
-//				GlobalState.setUserId(edittextUserId.getText().toString());
-//				GlobalState.setSessionName(edittextSessionName.getText().toString());
-//				GlobalState.setSessionId(edittextSessionId.getText().toString());
-//
-//				startActivity(intent);
-//			}
-//		});
-//		builder.setNegativeButton("Cancel",
-//				new DialogInterface.OnClickListener() {
-//			@Override
-//			public void onClick(DialogInterface dialog, int which) {
-//				dialog.cancel();
-//			}
-//		});
-//		builder.show();
-//
-//	}
 }

@@ -40,6 +40,7 @@
     <string name="location_prompt">Location Property Was Lost</string>
     <string name="date_prompt">Date Property Was Lost</string>
     <string name="description_prompt">Further Description of Lost Property</string>
+    <string name="title_activity_report_lost">ReportLost</string>
 
 
 </resources>
