@@ -12,6 +12,19 @@
   "IdentityManager": {
     "Default": {}
   },
+  "CognitoUserPool": {
+    "Default": {
+      "PoolId": "us-east-1_Si28lVCZO",
+      "AppClientId": "6hgttjfnmitdu3onu1h46kf3o9",
+      "AppClientSecret": "ano08r688iunoj9t31kqm7dm7fonoea0hv55dijm99rlbq3e32",
+      "Region": "us-east-1"
+    }
+  },
+  "DynamoDBObjectMapper": {
+    "Default": {
+      "Region": "us-east-1"
+    }
+  },
   "PinpointAnalytics": {
     "Default": {
       "AppId": "bad2b134ee0d484a81b4886edf2db7df",

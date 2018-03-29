@@ -1,8 +1,71 @@
-package PACKAGE_NAME;
+package com.example.julia.foundit;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 /**
- * Created by julia on 3/29/2018.
+ * Application class responsible for initializing singletons and other
+ * common components
  */
+public class Application extends MultiDexApplication {
+    public void onCreate() {
+        super.onCreate();
 
-public class Application {
+        AWSProvider.initialize(getApplicationContext());
+
+        registerActivityLifecycleCallbacks(new ActivityLifeCycle());
+
+    }
+}
+
+class ActivityLifeCycle implements android.app.Application.ActivityLifecycleCallbacks {
+    private int depth = 0;
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+        if (depth == 0) {
+            Log.d("ActivityLifeCycle", "Application entered foreground");
+        }
+        AWSProvider.getInstance().getPinpointManager().getSessionClient().startSession();
+        AWSProvider.getInstance().getPinpointManager().getAnalyticsClient().submitEvents();
+        depth++;
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        depth--;
+        if (depth == 0) {
+            Log.d("ActivityLifeCycle", "Application entered background");
+            AWSProvider.getInstance().getPinpointManager().getSessionClient().stopSession();
+            AWSProvider.getInstance().getPinpointManager().getAnalyticsClient().submitEvents();
+        }
+
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
 }

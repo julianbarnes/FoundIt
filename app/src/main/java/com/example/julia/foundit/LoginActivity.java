@@ -1,5 +1,6 @@
 package com.example.julia.foundit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.auth.core.DefaultSignInResultHandler;
+import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobile.auth.core.IdentityProvider;
+import com.amazonaws.mobile.auth.ui.AuthUIConfiguration;
+import com.amazonaws.mobile.auth.ui.SignInActivity;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,77 +26,60 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 
-//import com.amazonaws.mobile.client.AWSMobileClient;
+import android.graphics.Color;
+import android.os.Bundle;
+
+//import com.amazonaws.mobile.auth.facebook.FacebookButton;
+//import com.amazonaws.mobile.auth.google.GoogleButton;
+import com.amazonaws.mobile.auth.ui.AuthUIConfiguration;
+import com.amazonaws.mobile.auth.ui.SignInUI;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
 
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText email, password;
-    private Button sign_in, register;
-    private RequestQueue requestQueue;
-    private static final String URL = "string to backend";
-    private StringRequest request;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        //May have to move this after we change the order of Activities
-        //AWSMobileClient.getInstance().initialize(this).execute();
-
         setContentView(R.layout.activity_login);
-
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        sign_in = findViewById(R.id.login);
-        register = findViewById(R.id.register);
-
-        requestQueue = Volley.newRequestQueue(this);
-
-        sign_in.setOnClickListener(new View.OnClickListener() {
+        AWSProvider.initialize(getApplicationContext());
+        final IdentityManager identityManager = AWSProvider.getInstance().getIdentityManager();
+        // Set up the callbacks to handle the authentication response
+        identityManager.login(this, new DefaultSignInResultHandler() {
+            @Override
+            public void onSuccess(Activity activity, IdentityProvider identityProvider) {
+                Toast.makeText(LoginActivity.this,
+                        String.format("Logged in as %s", identityManager.getCachedUserID()),
+                        Toast.LENGTH_LONG).show();
+                // Go to the main activity
+                final Intent intent = new Intent(activity, com.example.julia.foundit.LostItemBrowseActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.startActivity(intent);
+                activity.finish();
+            }
 
             @Override
-            public void onClick(View v) {
-                Log.d("Buttons","This button was clicked");
-                Intent intent = new Intent(LoginActivity.this, LostItemBrowseActivity.class);
-                startActivity(intent);
+            public boolean onCancel(Activity activity) {
+                return false;
             }
-            /*public void onClick(View v) {
-                request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            if(jsonObject.names().get(0).equals("success")) {
-                                Toast.makeText(getApplicationContext(), "SUCCESS"
-                                        + jsonObject.getString("success"),
-                                        Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Error" + jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch(JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        HashMap<String, String> hashmap = new HashMap<String, String>();
-                        hashmap.put("email", email.getText().toString());
-                        hashmap.put("password", password.getText().toString());
-                        return hashmap;
-                    }
-                };
-                requestQueue.add(request);
-            }*/
         });
 
+        // Start the authentication UI
+        AuthUIConfiguration config = new AuthUIConfiguration.Builder()
+                .userPools(true)
+                .build();
+        SignInActivity.startSignInActivity(this, config);
+        LoginActivity.this.finish();
+
     }
+
+
+
 }

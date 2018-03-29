@@ -4,11 +4,12 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.julia.foundit"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
     buildTypes {
         release {
@@ -27,5 +28,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    //compile('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true; }
+    compile('com.amazonaws:aws-android-sdk-mobile-client:2.6.7@aar') { transitive = true; }
+    compile 'com.amazonaws:aws-android-sdk-pinpoint:2.6.+'
+    compile 'com.android.support:multidex:1.0.+'
+    // Cognito UserPools for SignIn
+    compile 'com.android.support:support-v4:26.+'
+    compile ('com.amazonaws:aws-android-sdk-auth-userpools:2.6.+@aar') { transitive = true; }
+
+    // Sign in UI Library
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile ('com.amazonaws:aws-android-sdk-auth-ui:2.6.+@aar') { transitive = true; }
+    compile ('com.amazonaws:aws-android-sdk-cognitoauth:2.6.+@aar') { transitive = true; }
+
 }
